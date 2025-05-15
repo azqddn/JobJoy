@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up</title>
+</head>
+<body>
+<h2>Create an Account</h2>
+
+<!--<form th:action="@{/signup}" th:object="${user}" method="post">-->
+<!--    <div>-->
+<!--        <label>Email:</label>-->
+<!--        <input type="email" th:field="*{email}" />-->
+<!--        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
+<!--        <span th:if="${emailError}" th:text="${emailError}"></span>-->
+<!--    </div>-->
+
+<!--    <div>-->
+<!--        <label>Password:</label>-->
+<!--        <input type="password" th:field="*{password}" />-->
+<!--        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
+<!--    </div>-->
+
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label>Confirm Password:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="password" th:field="*{confirmPassword}" />&ndash;&gt;-->
+<!--&lt;!&ndash;        <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--    <div>-->
+<!--        <button type="submit">Sign Up</button>-->
+<!--    </div>-->
+<!--</form>-->
+<h2>Create an Account</h2>
+
+<form th:action="@{/signup}" th:object="${user}" method="post">
+    <div>
+        <label>Username:</label>
+        <input type="text" th:field="*{username}"/>
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+    </div>
+
+    <div>
+        <label>Full Name:</label>
+        <input type="text" th:field="*{fullName}"/>
+        <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}"/>
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        <span th:if="${emailError}" th:text="${emailError}"></span>
+    </div>
+
+    <div>
+        <label>Password:</label>
+        <input type="password" th:field="*{password}"/>
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+    </div>
+
+    <div>
+        <button type="submit">Sign Up</button>
+    </div>
+</form>
+
+<div>
+    <p>Already have an account? <a th:href="@{/login}">Log in</a></p>
+</div>
+</body>
+</html>

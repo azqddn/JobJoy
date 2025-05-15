@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Fragments/app}">>
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Resume</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Create Resume</h1>
+    <form th:action="@{/resume/create}" enctype="multipart/form-data" th:object="${resume}" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="file">File:</label>
+        <input type="file" id="file" name="file" required><br><br>
+
+        <label for="notes">Notes:</label>
+        <input type="text" id="notes" name="notes"><br><br>
+
+        <button type="submit">Add</button>
+    </form>
+</div>
+</body>
+</html>
