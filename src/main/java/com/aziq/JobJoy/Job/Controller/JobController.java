@@ -60,25 +60,12 @@ public class JobController {
     @PostMapping("/create")
     public String saveJob(JobDto jobDto, Principal principal){
 
-        Job job = new Job();
-        job.setJobTitle(jobDto.getJobTitle());
-        job.setCompanyName(jobDto.getCompanyName());
-        job.setLocation(jobDto.getLocation());
-        job.setApplicationMethod(jobDto.getApplicationMethod());;
-        job.setJobLink(jobDto.getJobLink());
-        job.setHrEmail(jobDto.getHrEmail());
-        job.setStatus(Job.Status.valueOf(jobDto.getStatus()));
-        job.setApplicationDate(java.sql.Date.valueOf(jobDto.getApplicationDate()));
-        job.setNotes(jobDto.getNotes());
-
         Resume resume = resumeService.getById((long)jobDto.getResumeId());
-        job.setResume(resume);
 
         String email = principal.getName();
         User user = userService.findByEmail(email);
-        job.setUser(user);
 
-        jobService.saveJob(job);
+        jobService.saveJob(jobDto, user, resume);
 
         return "redirect:/job/list";
     }
@@ -99,5 +86,27 @@ public class JobController {
         } else {
             throw new RuntimeException("File not found");
         }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editJob(@PathVariable int id, Model model) {
+
+        model.addAttribute("job", jobService.getJobById((long) id));
+        model.addAttribute("resumes", resumeService.getAllResumes());
+
+        return "Job/edit-job";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateJob(@ModelAttribute JobDto jobDto, @PathVariable int id, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email);
+
+        Resume resume = resumeService.getById((long)jobDto.getResumeId());
+
+        Job job = jobService.getJobById((long) id);
+        jobService.updateJob(job, jobDto, user, resume);
+
+        return "redirect:/job/list";
     }
 }

@@ -22,6 +22,7 @@
             <th scope="col">Application Date</th>
             <th scope="col">Status</th>
             <th scope="col">Notes</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -44,6 +45,9 @@
             <td th:text="${job.applicationDate}"></td>
             <td th:text="${job.status}"></td>
             <td th:text="${job.notes}"></td>
+            <td>
+                <a class="btn btn-secondary" th:href="@{/job/edit/{id}(id=${job.jobId})}">Edit</a>
+            </td>
         </tr>
         </tbody>
     </table>
