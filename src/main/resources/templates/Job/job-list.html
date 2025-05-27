@@ -8,49 +8,181 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>Job List</h1>
-    <a class="btn btn-secondary" th:href="@{/job/create}">Create new application</a>
+    <div class="container py-3">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="text-start">
+                    <h2>Job List</h2>
+                </div>
+            </div>
+        </div>
+        <main>
+            <div class="d-flex justify-content-end mb-2">
+                <a class="btn btn-outline-primary" data-mdb-ripple-init data-mdb-ripple-color="dark"
+                   th:href="@{/job/create}">Create new application</a>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Company/References</th>
+                    <th scope="col">Method</th>
+                    <th scope="col">Resume/Cover Letter</th>
+                    <th scope="col">Application Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(jobs)}">
+                    <td colspan="10" class="text-center">No records found.</td>
+                </tr>
+                <tr th:each="job, loop : ${jobs}">
+                    <th scope="row" th:text="${loop.index + 1}"></th>
+                    <td th:text="${job.jobTitle}"></td>
+                    <td>
+                        <p class="fw-normal mb-1" th:text="${job.companyName}"></p>
+                        <p class="text-muted mb-0" th:text="${job.location}"></p>
+                        <p class="mb-0"><a th:href="${job.jobLink}" th:text="${job.jobLink}"></a></p>
+                        <p class="fw-normal mb-0" th:text="${job.hrEmail}"></p>
+                    </td>
+                    <td th:text="${job.applicationMethod}"></td>
+                    <td>
+                        <!--                <a th:href="@{/job/view/{filePath}(filePath=${job.resume.originalFileName})}" target="_blank">resume</a>-->
+                    </td>
+                    <td th:text="${job.applicationDate}"></td>
+<!--                    <td th:switch="${job.status}">-->
+<!--                        <span class="badge badge-success rounded-pill d-inline" th:case="'Applied'">Pending</span>-->
+<!--                        <span class="badge badge-primary rounded-pill d-inline" th:case="'Saved'">Saved</span>-->
+<!--                        <span class="badge badge-warning rounded-pill d-inline" th:case="'Pending'">Applied</span>-->
+<!--                        <span class="badge badge-secondary rounded-pill d-inline" th:case="*"-->
+<!--                              th:text="${job.status != 'Applied' and job.status != 'Saved' and job.status != 'Pending' ? job.status : 'Unknown'}">Unknown</span>-->
+<!--                    </td>-->
+                    <td>
+                        <span class="badge badge-primary rounded-pill d-inline" th:if="${job.status == 'Applied'}">Applied</span>
+                        <span class="badge badge-primary rounded-pill d-inline" th:if="${job.status == 'Saved'}">Saved</span>
+                        <span class="badge badge-warning rounded-pill d-inline" th:if="${job.status == 'Pending'}">Pending</span>
+                        <span class="badge badge-secondary rounded-pill d-inline" th:if="${job.status != 'Applied' and job.status != 'Saved' and job.status != 'Pending'}" th:text="${job.status}">Unknown</span>
+                    </td>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Job Title</th>
-            <th scope="col">Company/References</th>
-            <th scope="col">Method</th>
-            <th scope="col">Resume/Cover Letter</th>
-            <th scope="col">Application Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Notes</th>
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(jobs)}">
-            <td colspan="10" class="text-center">No records found.</td>
-        </tr>
-        <tr th:each="job, loop : ${jobs}">
-            <th scope="row" th:text="${loop.index + 1}"></th>
-            <td th:text="${job.jobTitle}"></td>
-            <td>
-                <p th:text="${job.companyName}"></p>
-                <p th:text="${job.location}"></p>
-                <p><a th:href="${job.jobLink}" th:text="${job.jobLink}"></a></p>
-                <p th:text="${job.hrEmail}"></p>
-            </td>
-            <td th:text="${job.applicationMethod}"></td>
-            <td>
-<!--                <a th:href="@{/job/view/{filePath}(filePath=${job.resume.originalFileName})}" target="_blank">resume</a>-->
-            </td>
-            <td th:text="${job.applicationDate}"></td>
-            <td th:text="${job.status}"></td>
-            <td th:text="${job.notes}"></td>
-            <td>
-                <a class="btn btn-secondary" th:href="@{/job/edit/{id}(id=${job.jobId})}">Edit</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                    <td th:text="${job.notes}"></td>
+                    <td>
+                        <a class="btn btn-secondary btn-rounded" data-mdb-ripple-init
+                           th:href="@{/job/edit/{id}(id=${job.jobId})}"><i class="fas fa-pen-to-square"></i></a>
+                        <a class="btn btn-danger btn-rounded" data-mdb-ripple-init> <i class="far fa-trash-can"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table align-middle mb-0 bg-white" style="border-radius: 10px;">
+                <thead class="bg-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Position</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img
+                                    src="https://mdbootstrap.com/img/new/avatars/8.jpg"
+                                    alt=""
+                                    style="width: 45px; height: 45px"
+                                    class="rounded-circle"
+                            />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">John Doe</p>
+                                <p class="text-muted mb-0">john.doe@gmail.com</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">Software engineer</p>
+                        <p class="text-muted mb-0">IT department</p>
+                    </td>
+                    <td>
+                        <span class="badge badge-success rounded-pill d-inline">Active</span>
+                    </td>
+                    <td>Senior</td>
+                    <td>
+                        <button type="button" class="btn btn-link btn-sm btn-rounded">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img
+                                    src="https://mdbootstrap.com/img/new/avatars/6.jpg"
+                                    class="rounded-circle"
+                                    alt=""
+                                    style="width: 45px; height: 45px"
+                            />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">Alex Ray</p>
+                                <p class="text-muted mb-0">alex.ray@gmail.com</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">Consultant</p>
+                        <p class="text-muted mb-0">Finance</p>
+                    </td>
+                    <td>
+                        <span class="badge badge-primary rounded-pill d-inline">Onboarding</span>
+                    </td>
+                    <td>Junior</td>
+                    <td>
+                        <button
+                                type="button"
+                                class="btn btn-link btn-rounded btn-sm fw-bold"
+                                data-mdb-ripple-color="dark"
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img
+                                    src="https://mdbootstrap.com/img/new/avatars/7.jpg"
+                                    class="rounded-circle"
+                                    alt=""
+                                    style="width: 45px; height: 45px"
+                            />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">Kate Hunington</p>
+                                <p class="text-muted mb-0">kate.hunington@gmail.com</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">Designer</p>
+                        <p class="text-muted mb-0">UI/UX</p>
+                    </td>
+                    <td>
+                        <span class="badge badge-warning rounded-pill d-inline">Awaiting</span>
+                    </td>
+                    <td>Senior</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init
+                                data-mdb-ripple-color="dark">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
 </div>
 </body>
 </html>

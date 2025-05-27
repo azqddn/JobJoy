@@ -36,12 +36,13 @@
         <label for="hrEmail">HR Email:</label>
         <input type="email" id="hrEmail" name="hrEmail" th:field="*{hrEmail}"/>
 
-<!--        <label for="resumeId" class="form-label">Resume:</label>-->
-<!--        <select class="" id="resumeId" th:field="*{resumeId}">-->
-<!--            <option th:each="resume : ${resumes}"-->
-<!--                    th:value="${resume.resumeId}"-->
-<!--                    th:text="${resume.title}"></option>-->
-<!--        </select>-->
+        <label for="resumeId" class="form-label">Resume:</label>
+        <select id="resumeId" th:field="*{resume.resumeId}">
+            <option th:each="resume : ${resumes}"
+                    th:value="${resume.resumeId}"
+                    th:text="${resume.title}">
+            </option>
+        </select>
 
         <label for="status" class="form-label">Status:</label>
         <select id="status" name="status" th:field="*{status}" class="">

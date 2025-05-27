@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Fragments/app}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Resume</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-3 col-lg-8">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="text-start">
+                    <h2>Resume Edit</h2>
+                </div>
+            </div>
+        </div>
+        <div>
+            <form th:action="@{/resume/update/{id}(id=${resume.resumeId})}" method="POST" th:object="${resume}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" placeholder="" name="title"
+                           th:field="*{title}">
+                </div>
+                <div class="mb-3">
+                    <label for="originalFileName" class="form-label">File</label>
+                    <div class="d-flex justify-content-between">
+                        <input type="text" class="form-control me-2" id="originalFileName" th:value="*{originalFileName}" readonly disabled>
+                        <a th:href="@{/resume/view/{filePath}(filePath=*{uniqueFileName})}" class="btn btn-dark" target="_blank">View</a>
+                    </div>
+                    <input type="hidden" th:field="*{uniqueFileName}">
+                </div>
+                <div class="mb-3">
+                    <label for="notes" class="form-label">Note</label>
+                    <input type="text" class="form-control" id="notes" placeholder="" name="notes"
+                           th:field="*{notes}">
+                </div>
+                <div class="mb-3 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-rounded">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

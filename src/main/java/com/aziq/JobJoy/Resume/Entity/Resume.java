@@ -1,5 +1,6 @@
 package com.aziq.JobJoy.Resume.Entity;
 
+import com.aziq.JobJoy.Job.Entity.Job;
 import com.aziq.JobJoy.User.Entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -43,4 +45,8 @@ public class Resume {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    // Relationship with Job entity
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Job> jobs;
 }
