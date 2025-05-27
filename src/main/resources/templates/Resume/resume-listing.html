@@ -19,15 +19,18 @@
         <main>
             <a class="btn btn-secondary" th:href="@{/resume/create}">Add Resume</a>
             <div class="d-flex" style="width:100%;">
-                <div class="card me-3" style="width: 18rem;" th:each="resume : ${resumes}">
-                    <!--            <img src="..." class="card-img-top" alt="...">-->
-                    <a th:href="@{/resume/view/{filePath}(filePath=${resume.uniqueFileName})}"
-                       target="_blank">resume</a>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${resume.title}"></h5>
-                        <p class="card-text" th:text="${resume.notes}"></p>
-                        <a th:href="@{/resume/edit/{id}(id=${resume.resumeId})}" class="btn btn-secondary">Edit</a>
-                        <a th:href="@{/resume/delete/{id}(id=${resume.resumeId})}" class="btn btn-danger">Delete</a>
+                <div class="row row-cols-5 g-3">
+                    <div class="col" th:each="resume : ${resumes}">
+                        <div class="card h-100">
+                            <a th:href="@{/resume/view/{filePath}(filePath=${resume.uniqueFileName})}"
+                               target="_blank">resume</a>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${resume.title}"></h5>
+                                <p class="card-text" th:text="${resume.notes}"></p>
+                                <a th:href="@{/resume/edit/{id}(id=${resume.resumeId})}" class="btn btn-secondary">Edit</a>
+                                <a th:href="@{/resume/delete/{id}(id=${resume.resumeId})}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,3 +40,6 @@
 </div>
 </body>
 </html>
+
+
+
