@@ -4,12 +4,16 @@ import com.aziq.JobJoy.Resume.DTO.ResumeDto;
 import com.aziq.JobJoy.Resume.Entity.Resume;
 import com.aziq.JobJoy.Resume.Repository.ResumeRepository;
 import com.aziq.JobJoy.User.Entity.User;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +32,7 @@ public class ResumeService {
         String uniqueFileName = UUID.randomUUID().toString() + extension;
 
         try {
-            file.transferTo(new File(uploadDir + originalFilename));
+            file.transferTo(new File(uploadDir + uniqueFileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,16 +51,39 @@ public class ResumeService {
         resumeRepository.save(resume);
     }
 
-//    public Resume saveResume(Resume resume) {
-//        return resumeRepository.save(resume);
-//    }
-
     public Resume getById(Long id){
-        return resumeRepository.findById(id).get();
+        return resumeRepository.findById(id).orElse(null);
     }
 
     public void deleteById(Long id) {
         resumeRepository.deleteById(id);
+    }
+
+    public void viewResume(String uploadDir, String filePath, HttpServletResponse response){
+        Path resumeFile = Paths.get(uploadDir, filePath);
+        if (Files.exists(resumeFile)) {
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=\"" + filePath + "\"");
+            try {
+                Files.copy(resumeFile, response.getOutputStream());
+                response.getOutputStream().flush();
+            } catch (IOException e) {
+                throw new RuntimeException("Error while serving the file", e);
+            }
+        } else {
+            throw new RuntimeException("File not found");
+        }
+    }
+
+    public void updateResume(Long id, ResumeDto resumeDto) {
+        Resume existingResume = resumeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
+
+        // Update only title and notes
+        existingResume.setTitle(resumeDto.getTitle());
+        existingResume.setNotes(resumeDto.getNotes());
+
+        resumeRepository.save(existingResume);
     }
 
 }

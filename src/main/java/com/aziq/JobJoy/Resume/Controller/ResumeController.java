@@ -1,6 +1,7 @@
 package com.aziq.JobJoy.Resume.Controller;
 
 
+import com.aziq.JobJoy.Job.DTO.JobDto;
 import com.aziq.JobJoy.Resume.DTO.ResumeDto;
 import com.aziq.JobJoy.Resume.Entity.Resume;
 import com.aziq.JobJoy.Resume.Service.ResumeService;
@@ -65,19 +66,20 @@ public class ResumeController {
     @GetMapping("/view/{filePath}")
     @ResponseBody
     public void viewFile(@PathVariable String filePath, HttpServletResponse response) {
-        Path resumeFile = Paths.get(uploadDir, filePath);
-        if (Files.exists(resumeFile)) {
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "inline; filename=\"" + filePath + "\"");
-            try {
-                Files.copy(resumeFile, response.getOutputStream());
-                response.getOutputStream().flush();
-            } catch (IOException e) {
-                throw new RuntimeException("Error while serving the file", e);
-            }
-        } else {
-            throw new RuntimeException("File not found");
-        }
+        resumeService.viewResume(uploadDir, filePath, response);
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editResume(@PathVariable Long id, Model model) {
+        Resume resume = resumeService.getById(id);
+        model.addAttribute("resume", resume);
+        return "Resume/edit-resume";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateResume(@PathVariable Long id, @ModelAttribute ResumeDto resumeDto) {
+        resumeService.updateResume(id, resumeDto);
+        return "redirect:/resume/list";
     }
 
     @GetMapping("/delete/{id}")
