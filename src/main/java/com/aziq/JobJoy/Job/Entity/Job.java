@@ -1,6 +1,7 @@
 package com.aziq.JobJoy.Job.Entity;
 
 
+import com.aziq.JobJoy.Cover_Letter.Entity.CoverLetter;
 import com.aziq.JobJoy.Resume.Entity.Resume;
 import com.aziq.JobJoy.User.Entity.User;
 import jakarta.persistence.*;
@@ -29,6 +30,10 @@ public class Job {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cover_letter_id")
+    private CoverLetter coverLetter;
 
     @Column(name = "job_title")
     private String jobTitle;

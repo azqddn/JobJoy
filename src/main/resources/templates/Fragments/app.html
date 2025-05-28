@@ -29,18 +29,25 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 px-3" style="border:1px solid #e3e3e3;">
     <a class="navbar-brand" href="#">JobJoy</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<!--    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"-->
+<!--            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--        <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
 
             <li class="nav-item active">
                 <a class="nav-link" th:href="@{/user/home}">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href = "@{/resume/list}">Documents</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="documentsDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Documents
+                </a>
+                <div class="dropdown-menu" aria-labelledby="documentsDropdown">
+                    <a class="dropdown-item" th:href = "@{/resume/list}">Resume</a>
+                    <a class="dropdown-item" th:href="@{/cover-letter/list}">Cover Letter</a>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/job/list}">Job Application</a>
@@ -49,11 +56,11 @@
                 <a class="nav-link" href="#">Result</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="others" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dropdown link
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <div class="dropdown-menu" aria-labelledby="others">
                     <a class="dropdown-item" href="#">Profile</a>
                     <a class="dropdown-item" href="#">Saved Jobs</a>
                     <a class="dropdown-item" href="#">

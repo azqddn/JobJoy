@@ -53,8 +53,7 @@
         </select>
 
         <label for="applicationDate">Application Date:</label>
-        <input type="date" id="applicationDate" name="applicationDate" th:field="*{applicationDate}" th:value="${#dates.format(job.applicationDate, 'yyyy-MM-dd')}"/>
-
+        <input type="date" id="applicationDate" name="applicationDate" th:field="*{applicationDate}" th:value="${job.applicationDate != null ? #dates.format(job.applicationDate, 'yyyy-MM-dd') : ''}"/>
         <label for="notes">Notes:</label>
         <textarea id="notes" name="notes" th:field="*{notes}"></textarea>
 
