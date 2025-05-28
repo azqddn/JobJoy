@@ -70,23 +70,6 @@ public class JobController {
         return "redirect:/job/list";
     }
 
-//    @GetMapping("/view/{filePath}")
-//    @ResponseBody
-//    public void viewFile(@PathVariable String filePath, HttpServletResponse response) {
-//        Path resumeFile = Paths.get(uploadDir, filePath);
-//        if (Files.exists(resumeFile)) {
-//            response.setContentType("application/pdf");
-//            response.setHeader("Content-Disposition", "inline; filename=\"" + filePath + "\"");
-//            try {
-//                Files.copy(resumeFile, response.getOutputStream());
-//                response.getOutputStream().flush();
-//            } catch (IOException e) {
-//                throw new RuntimeException("Error while serving the file", e);
-//            }
-//        } else {
-//            throw new RuntimeException("File not found");
-//        }
-//    }
 
     @GetMapping("/edit/{id}")
     public String editJob(@PathVariable int id, Model model) {
