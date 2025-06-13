@@ -5,6 +5,7 @@ import com.aziq.JobJoy.Cover_Letter.Entity.CoverLetter;
 import com.aziq.JobJoy.Cover_Letter.Service.CoverLetterService;
 import com.aziq.JobJoy.User.Entity.User;
 import com.aziq.JobJoy.User.Service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,32 @@ public class CoverLetterController {
         User user = userService.findByEmail(email);
 
         coverLetterService.saveCoverLetter(coverLetterDto, uniqueFileName, user, file);
+
+        return "redirect:/cover-letter/list";
+    }
+
+    @GetMapping("/view/{filePath}")
+    @ResponseBody
+    public void viewFile(@PathVariable String filePath, HttpServletResponse response) {
+        coverLetterService.viewCoverLetter(uploadDir, filePath, response);
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editCoverLetter(@PathVariable Long id, Model model) {
+        CoverLetter coverLetter = coverLetterService.getById(id);
+        model.addAttribute("coverLetter", coverLetter);
+        return "Cover_Letter/cover-letter-edit";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateCoverLetter(@PathVariable Long id, @ModelAttribute CoverLetterDto coverLetterDto) {
+        coverLetterService.updateCoverLetter(id, coverLetterDto);
+        return "redirect:/cover-letter/list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCoverLetter(@PathVariable Long id) {
+        coverLetterService.deleteById(id);
 
         return "redirect:/cover-letter/list";
     }

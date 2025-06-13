@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Fragments/app}">>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Cover Letter Listing</title>
 </head>
 <body>
-
+<div layout:fragment="content">
+    <div class="container py-3">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="text-start">
+                    <h2>Cover Letter List</h2>
+                </div>
+            </div>
+        </div>
+        <main>
+            <a class="btn btn-secondary" th:href="@{/cover-letter/create}">Add Cover Letter</a>
+            <div class="d-flex" style="width:100%;">
+                <div class="row row-cols-5 g-3">
+                    <div class="col" th:each="coverLetter : ${coverLetters}">
+                        <div class="card h-100">
+                            <a th:href="@{/cover-letter/view/{filePath}(filePath=${coverLetter.uniqueFileName})}"
+                               target="_blank">resume</a>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${coverLetter.title}"></h5>
+                                <p class="card-text" th:text="${coverLetter.notes}"></p>
+                                <a th:href="@{/cover-letter/edit/{id}(id=${coverLetter.coverLetterId})}" class="btn btn-secondary">Edit</a>
+                                <a th:href="@{/cover-letter/delete/{id}(id=${coverLetter.coverLetterId})}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</div>
 </body>
 </html>
+
+
+

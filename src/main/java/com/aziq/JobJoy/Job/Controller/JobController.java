@@ -1,5 +1,7 @@
 package com.aziq.JobJoy.Job.Controller;
 
+import com.aziq.JobJoy.Cover_Letter.Entity.CoverLetter;
+import com.aziq.JobJoy.Cover_Letter.Service.CoverLetterService;
 import com.aziq.JobJoy.Job.DTO.JobDto;
 import com.aziq.JobJoy.Job.Entity.Job;
 import com.aziq.JobJoy.Job.Service.JobService;
@@ -31,20 +33,23 @@ public class JobController {
     private final JobService jobService;
     private final UserService userService;
     private final ResumeService resumeService;
+    private final CoverLetterService coverLetterService;
 
     @Value("${resume.upload-dir}")
     private String uploadDir;
 
     @Autowired
-    public JobController(JobService jobService, UserService userService, ResumeService resumeService){
+    public JobController(JobService jobService, UserService userService, ResumeService resumeService, CoverLetterService coverLetterService){
         this.jobService = jobService;
         this.userService = userService;
         this.resumeService = resumeService;
+        this.coverLetterService = coverLetterService;
     }
 
     @GetMapping("/list")
     public String getAllJobs(Model model) {
         model.addAttribute("jobs", jobService.getAllJobsOrderByApplicationDateDesc());
+
 //        model.addAttribute("resumes", resumeService.getAllResumes());
         return "Job/job-list";
     }
@@ -54,50 +59,50 @@ public class JobController {
 //        Job job = new Job();
         model.addAttribute("job", new JobDto());
         model.addAttribute("resumes", resumeService.getAllResumes());
+        model.addAttribute("cover_letters", coverLetterService.getAllCoverLetters());
         return "Job/create-job";
     }
 
     @PostMapping("/create")
     public String saveJob(JobDto jobDto, Principal principal){
 
-        Job job = new Job();
-        job.setJobTitle(jobDto.getJobTitle());
-        job.setCompanyName(jobDto.getCompanyName());
-        job.setLocation(jobDto.getLocation());
-        job.setApplicationMethod(jobDto.getApplicationMethod());;
-        job.setJobLink(jobDto.getJobLink());
-        job.setHrEmail(jobDto.getHrEmail());
-        job.setStatus(Job.Status.valueOf(jobDto.getStatus()));
-        job.setApplicationDate(java.sql.Date.valueOf(jobDto.getApplicationDate()));
-        job.setNotes(jobDto.getNotes());
-
         Resume resume = resumeService.getById((long)jobDto.getResumeId());
-        job.setResume(resume);
+        CoverLetter coverLetter = coverLetterService.getById((long)jobDto.getCoverLetterId());
 
         String email = principal.getName();
         User user = userService.findByEmail(email);
-        job.setUser(user);
 
-        jobService.saveJob(job);
+        jobService.saveJob(jobDto, user, resume, coverLetter);
 
         return "redirect:/job/list";
     }
 
-    @GetMapping("/view/{filePath}")
-    @ResponseBody
-    public void viewFile(@PathVariable String filePath, HttpServletResponse response) {
-        Path resumeFile = Paths.get(uploadDir, filePath);
-        if (Files.exists(resumeFile)) {
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "inline; filename=\"" + filePath + "\"");
-            try {
-                Files.copy(resumeFile, response.getOutputStream());
-                response.getOutputStream().flush();
-            } catch (IOException e) {
-                throw new RuntimeException("Error while serving the file", e);
-            }
-        } else {
-            throw new RuntimeException("File not found");
-        }
+
+    @GetMapping("/edit/{id}")
+    public String editJob(@PathVariable int id, Model model) {
+        CoverLetter coverLetter = coverLetterService.getById((long)id);
+
+        model.addAttribute("job", jobService.getJobById((long) id));
+        model.addAttribute("resumes", resumeService.getAllResumes());
+        model.addAttribute("cover_letters", coverLetterService.getAllCoverLetters());
+
+        return "Job/edit-job";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateJob(@ModelAttribute JobDto jobDto, @PathVariable int id, Principal principal) {
+
+        System.out.println(jobDto);
+
+        String email = principal.getName();
+        User user = userService.findByEmail(email);
+
+        Resume resume = resumeService.getById((long)jobDto.getResumeId());
+        CoverLetter coverLetter = coverLetterService.getById((long)jobDto.getCoverLetterId());
+
+        Job job = jobService.getJobById((long) id);
+        jobService.updateJob(job, jobDto, user, resume, coverLetter);
+
+        return "redirect:/job/list";
     }
 }

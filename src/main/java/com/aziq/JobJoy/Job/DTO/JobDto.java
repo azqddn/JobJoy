@@ -11,6 +11,7 @@ public class JobDto {
     private int jobId;
     private int userId;
     private int resumeId;
+    private int coverLetterId;
     private String jobTitle;
     private String companyName;
     private String location;
