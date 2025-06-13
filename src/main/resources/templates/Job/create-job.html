@@ -40,6 +40,13 @@
               th:text="${resume.title}"></option>
     </select>
 
+    <label for="coverLetterId" class="form-label">Cover Letter:</label>
+    <select class="" id="coverLetterId" th:field="*{coverLetterId}">
+      <option th:each="cover_letter : ${cover_letters}"
+              th:value="${cover_letter.coverLetterId}"
+              th:text="${cover_letter.title}"></option>
+    </select>
+
     <label for="status" class="form-label">Status:</label>
     <select id="status" name="status" th:field="*{status}" class="">
       <option th:each="status : ${T(com.aziq.JobJoy.Job.Entity.Job.Status).values()}"

@@ -50,7 +50,11 @@
                     </td>
                     <td th:text="${job.applicationMethod}"></td>
                     <td>
-                        <!--                <a th:href="@{/job/view/{filePath}(filePath=${job.resume.originalFileName})}" target="_blank">resume</a>-->
+                        <a th:if="${job.resume != null}" th:href="@{'/resume/view/' + ${job.resume.uniqueFileName}}" target="_blank">Resume</a>
+                        <span th:if="${job.resume == null}">No resume</span>
+                        <br>
+                        <a th:if="${job.coverLetter != null}" th:href="@{'/cover-letter/view/' + ${job.coverLetter.uniqueFileName}}" target="_blank">Cover Letter</a>
+                        <span th:if="${job.coverLetter == null}">No Cover Letter</span>
                     </td>
                     <td th:text="${job.applicationDate}"></td>
 <!--                    <td th:switch="${job.status}">-->
@@ -70,8 +74,8 @@
                     <td th:text="${job.notes}"></td>
                     <td>
                         <a class="btn btn-secondary btn-rounded" data-mdb-ripple-init
-                           th:href="@{/job/edit/{id}(id=${job.jobId})}"><i class="fas fa-pen-to-square"></i></a>
-                        <a class="btn btn-danger btn-rounded" data-mdb-ripple-init> <i class="far fa-trash-can"></i></a>
+                           th:href="@{/job/edit/{id}(id=${job.jobId})}"><i class="fas fa-pen-to-square"></i>Edit</a>
+                        <a class="btn btn-danger btn-rounded" data-mdb-ripple-init> <i class="far fa-trash-can"></i>Delete</a>
                     </td>
                 </tr>
                 </tbody>

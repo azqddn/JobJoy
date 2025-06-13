@@ -1,5 +1,7 @@
 package com.aziq.JobJoy.Job.Controller;
 
+import com.aziq.JobJoy.Cover_Letter.Entity.CoverLetter;
+import com.aziq.JobJoy.Cover_Letter.Service.CoverLetterService;
 import com.aziq.JobJoy.Job.DTO.JobDto;
 import com.aziq.JobJoy.Job.Entity.Job;
 import com.aziq.JobJoy.Job.Service.JobService;
@@ -31,20 +33,23 @@ public class JobController {
     private final JobService jobService;
     private final UserService userService;
     private final ResumeService resumeService;
+    private final CoverLetterService coverLetterService;
 
     @Value("${resume.upload-dir}")
     private String uploadDir;
 
     @Autowired
-    public JobController(JobService jobService, UserService userService, ResumeService resumeService){
+    public JobController(JobService jobService, UserService userService, ResumeService resumeService, CoverLetterService coverLetterService){
         this.jobService = jobService;
         this.userService = userService;
         this.resumeService = resumeService;
+        this.coverLetterService = coverLetterService;
     }
 
     @GetMapping("/list")
     public String getAllJobs(Model model) {
         model.addAttribute("jobs", jobService.getAllJobsOrderByApplicationDateDesc());
+
 //        model.addAttribute("resumes", resumeService.getAllResumes());
         return "Job/job-list";
     }
@@ -54,6 +59,7 @@ public class JobController {
 //        Job job = new Job();
         model.addAttribute("job", new JobDto());
         model.addAttribute("resumes", resumeService.getAllResumes());
+        model.addAttribute("cover_letters", coverLetterService.getAllCoverLetters());
         return "Job/create-job";
     }
 
@@ -61,11 +67,12 @@ public class JobController {
     public String saveJob(JobDto jobDto, Principal principal){
 
         Resume resume = resumeService.getById((long)jobDto.getResumeId());
+        CoverLetter coverLetter = coverLetterService.getById((long)jobDto.getCoverLetterId());
 
         String email = principal.getName();
         User user = userService.findByEmail(email);
 
-        jobService.saveJob(jobDto, user, resume);
+        jobService.saveJob(jobDto, user, resume, coverLetter);
 
         return "redirect:/job/list";
     }
@@ -73,9 +80,11 @@ public class JobController {
 
     @GetMapping("/edit/{id}")
     public String editJob(@PathVariable int id, Model model) {
+        CoverLetter coverLetter = coverLetterService.getById((long)id);
 
         model.addAttribute("job", jobService.getJobById((long) id));
         model.addAttribute("resumes", resumeService.getAllResumes());
+        model.addAttribute("cover_letters", coverLetterService.getAllCoverLetters());
 
         return "Job/edit-job";
     }
@@ -89,9 +98,10 @@ public class JobController {
         User user = userService.findByEmail(email);
 
         Resume resume = resumeService.getById((long)jobDto.getResumeId());
+        CoverLetter coverLetter = coverLetterService.getById((long)jobDto.getCoverLetterId());
 
         Job job = jobService.getJobById((long) id);
-        jobService.updateJob(job, jobDto, user, resume);
+        jobService.updateJob(job, jobDto, user, resume, coverLetter);
 
         return "redirect:/job/list";
     }
