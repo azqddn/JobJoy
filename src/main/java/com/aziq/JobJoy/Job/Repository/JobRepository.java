@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
-    @Query("SELECT j FROM Job j ORDER BY j.applicationDate DESC")
+    @Query("SELECT j FROM Job j ORDER BY j.updatedAt DESC")
     List<Job> findAllJobsOrderByApplicationDateDesc();
 }
