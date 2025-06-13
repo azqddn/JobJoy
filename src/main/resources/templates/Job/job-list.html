@@ -56,7 +56,7 @@
                         <a th:if="${job.coverLetter != null}" th:href="@{'/cover-letter/view/' + ${job.coverLetter.uniqueFileName}}" target="_blank">Cover Letter</a>
                         <span th:if="${job.coverLetter == null}">No Cover Letter</span>
                     </td>
-                    <td th:text="${job.applicationDate}"></td>
+                    <td th:if="${job.applicationDate != null}" th:text="${#dates.format(job.applicationDate, 'yyy-MM-dd')}"></td>
 <!--                    <td th:switch="${job.status}">-->
 <!--                        <span class="badge badge-success rounded-pill d-inline" th:case="'Applied'">Pending</span>-->
 <!--                        <span class="badge badge-primary rounded-pill d-inline" th:case="'Saved'">Saved</span>-->
